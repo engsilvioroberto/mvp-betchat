@@ -21,7 +21,7 @@ from routers.players import router as players_router
 from routers.bets import router as bets_router
 from routers.simulate import router as simulate_router
 
-# Initialize database tables on cold start
+# Initialize tables on first request (not at import, avoids cold-start crash)
 init_db()
 
 app = FastAPI(title="Betchat", version="1.0.0")

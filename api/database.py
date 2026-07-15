@@ -6,21 +6,28 @@ from sqlalchemy.sql import func
 # Default: SQLite local. Set DATABASE_URL env var for PostgreSQL (Supabase)
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///betchat.db")
 
-# Handle +aiosqlite suffix used in some local setups
-if "+aiosqlite" in DATABASE_URL:
-    DATABASE_URL = DATABASE_URL.replace("+aiosqlite", "")
+# Detect database type
+raw_url = DATABASE_URL
 
-is_sqlite = DATABASE_URL.startswith("sqlite")
+# Handle +aiosqlite suffix used in some local setups
+if raw_url.startswith("sqlite+aiosqlite"):
+    raw_url = raw_url.replace("+aiosqlite", "")
+
+# If PostgreSQL and no explicit dialect, use pg8000 (pure Python, works on Vercel)
+if raw_url.startswith("postgresql://") and "+" not in raw_url.replace("postgresql+", "____"):
+    raw_url = raw_url.replace("postgresql://", "postgresql+pg8000://")
+
+is_sqlite = raw_url.startswith("sqlite")
 if is_sqlite:
     engine = create_engine(
-        DATABASE_URL,
+        raw_url,
         echo=False,
         connect_args={"check_same_thread": False},
     )
 else:
     # PostgreSQL (Supabase) — single-connection pool for serverless
     engine = create_engine(
-        DATABASE_URL,
+        raw_url,
         echo=False,
         pool_size=1,
         max_overflow=0,
@@ -105,5 +112,13 @@ class Transaction(Base):
     player = relationship("Player", back_populates="transactions")
 
 
+_db_initialized = False
+
+
 def init_db():
+    """Initialize database tables. Safe to call multiple times."""
+    global _db_initialized
+    if _db_initialized:
+        return
     Base.metadata.create_all(bind=engine)
+    _db_initialized = True

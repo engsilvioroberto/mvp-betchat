@@ -24,6 +24,19 @@
   --card-border: 2px solid var(--ink);
   --radius: 2px;
   --transition: 120ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  /* DevPanel theme (compat) */
+  --bg-panel: #FFF;
+  --bg-elevated: #F5F0E0;
+  --bg-hover: #EDE8D4;
+  --text-primary: #1B1A17;
+  --text-secondary: #6B6452;
+  --text-tertiary: #A09986;
+  --border-default: #D8CFB4;
+  --brand: #E8462B;
+  --brand-hover: #D13A21;
+  --brand-light: #FFF0E8;
+  --font-sans: 'Hanken Grotesk', sans-serif;
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 *, *::before, *::after {

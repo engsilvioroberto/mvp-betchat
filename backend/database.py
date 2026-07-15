@@ -3,9 +3,29 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, Text, Date
 from sqlalchemy.orm import DeclarativeBase, relationship
 from sqlalchemy.sql import func
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///betchat.db")
+# Default: SQLite local. Set DATABASE_URL env var for PostgreSQL (Supabase)
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///betchat.db")
 
-engine = create_engine(DATABASE_URL.replace("+aiosqlite", ""), echo=False)
+# Handle +aiosqlite suffix used in some local setups
+if "+aiosqlite" in DATABASE_URL:
+    DATABASE_URL = DATABASE_URL.replace("+aiosqlite", "")
+
+is_sqlite = DATABASE_URL.startswith("sqlite")
+if is_sqlite:
+    engine = create_engine(
+        DATABASE_URL,
+        echo=False,
+        connect_args={"check_same_thread": False},
+    )
+else:
+    # PostgreSQL (Supabase) — single-connection pool for serverless
+    engine = create_engine(
+        DATABASE_URL,
+        echo=False,
+        pool_size=1,
+        max_overflow=0,
+        pool_pre_ping=True,
+    )
 
 
 class Base(DeclarativeBase):
@@ -28,7 +48,7 @@ class Player(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(100), nullable=False)
-    saldo = Column(Float, default=100.0)  # saldo inicial fictício
+    saldo = Column(Float, default=100.0)
     grupo_id = Column(Integer, ForeignKey("groups.id"), nullable=False)
     created_at = Column(DateTime, server_default=func.now())
 

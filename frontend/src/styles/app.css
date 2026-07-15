@@ -1,0 +1,822 @@
+/* ============================================
+   BETCHAT — 7a0-Inspired Design
+   Paper, sticker cards, bold typography
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Hanken+Grotesk:wght@400;500;700;800&family=Archivo+Black&display=swap');
+
+:root {
+  --surface: #F3ECD8;
+  --surface-2: #FFFFFF;
+  --ink: #1B1A17;
+  --muted: #6B6452;
+  --accent: #E8462B;
+  --accent-2: #C8A24B;
+  --accent-2-bright: #E8B830;
+  --win: #2F7D4F;
+  --line: #D8CFB4;
+  --line-strong: #C4B89A;
+  --display: 'Anton', sans-serif;
+  --body: 'Hanken Grotesk', sans-serif;
+  --numeral: 'Archivo Black', sans-serif;
+  --hard-shadow: 3px 3px 0 var(--line);
+  --hard-shadow-ink: 3px 3px 0 #1B1A17;
+  --card-border: 2px solid #FFFFFF;
+  --radius: 2px;
+  --transition: 120ms cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--body);
+  color: var(--ink);
+  background: var(--surface);
+  line-height: 1.5;
+  letter-spacing: 0.005em;
+}
+
+/* Paper texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ============================================
+   APP CONTAINER
+   ============================================ */
+.app {
+  max-width: 420px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.header {
+  background: var(--surface-2);
+  border-bottom: 2px solid var(--line);
+  padding: 14px 20px 12px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: var(--hard-shadow);
+  margin: 0 8px 0;
+  margin-top: 8px;
+}
+
+.header h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  line-height: 0.92;
+}
+
+.header p {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-row h1 {
+  font-size: 1.1rem;
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  flex: 1;
+}
+
+/* ============================================
+   BACK BUTTON
+   ============================================ */
+.back-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  flex-shrink: 0;
+  box-shadow: 2px 2px 0 var(--line-strong);
+}
+
+.back-btn:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--line-strong);
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+.content {
+  flex: 1;
+  padding: 12px 8px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ============================================
+   CARDS — Sticker style
+   ============================================ */
+.card {
+  background: var(--surface-2);
+  border: var(--card-border);
+  padding: 14px;
+  box-shadow: var(--hard-shadow);
+  position: relative;
+}
+
+.card h3 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+  color: var(--ink);
+  line-height: 0.92;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  color: var(--ink);
+  font-size: 0.85rem;
+}
+
+.card-row + .card-row {
+  border-top: 1px solid var(--line);
+}
+
+.num {
+  font-family: var(--numeral);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border: none;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.btn:active { transform: translate(2px, 2px); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: var(--hard-shadow-ink);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--ink);
+  color: var(--surface-2);
+}
+
+.btn-danger {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: var(--hard-shadow-ink);
+}
+
+.btn-danger:hover:not(:disabled) {
+  transform: translate(1px, 1px);
+}
+
+.btn-small {
+  height: 32px;
+  padding: 0 14px;
+  font-size: 0.78rem;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  height: 32px;
+  padding: 0 8px;
+  font-family: var(--body);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.8rem;
+}
+
+.btn-ghost:hover {
+  color: var(--ink);
+}
+
+/* ============================================
+   INPUTS
+   ============================================ */
+.input-group {
+  margin-bottom: 10px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.input {
+  width: 100%;
+  height: 44px;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  padding: 0 12px;
+  font-family: var(--body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink);
+  outline: none;
+  transition: all var(--transition);
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 2px 2px 0 var(--accent);
+  background: var(--surface-2);
+}
+
+.input::placeholder {
+  color: var(--muted);
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+/* ============================================
+   BADGES
+   ============================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  font-size: 0.7rem;
+  font-family: var(--body);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  height: 22px;
+  border: 2px solid var(--ink);
+}
+
+.badge-green {
+  background: var(--win);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.badge-yellow {
+  background: var(--accent-2);
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.badge-blue {
+  background: var(--ink);
+  color: var(--surface-2);
+  border-color: var(--ink);
+}
+
+.badge-red {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+/* ============================================
+   STATUS BAR
+   ============================================ */
+.status-bar {
+  display: flex;
+  gap: 2px;
+  border: 2px solid var(--ink);
+  overflow: hidden;
+}
+
+.status-item {
+  flex: 1;
+  background: var(--surface-2);
+  padding: 10px 6px;
+  text-align: center;
+}
+
+.status-item + .status-item {
+  border-left: 1px solid var(--line);
+}
+
+.status-item .value {
+  font-family: var(--numeral);
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.status-item .value.accent {
+  color: var(--accent);
+}
+
+.status-item .value.warning {
+  color: var(--accent-2-bright);
+}
+
+.status-item .value.danger {
+  color: var(--accent);
+}
+
+.status-item .label {
+  font-size: 0.6rem;
+  color: var(--muted);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+}
+
+/* ============================================
+   RESULT ITEMS
+   ============================================ */
+.result-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  transition: background var(--transition);
+}
+
+.result-item:last-child { border-bottom: none; }
+.result-item:hover { background: var(--surface); }
+
+.result-rank {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--numeral);
+  font-weight: 400;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  border: 2px solid var(--ink);
+}
+
+.rank-1 {
+  background: var(--accent-2);
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.rank-2 {
+  background: var(--surface);
+  color: var(--muted);
+  border-color: var(--line-strong);
+}
+
+.rank-3 {
+  background: var(--surface);
+  color: var(--muted);
+  border-color: var(--line-strong);
+}
+
+.rank-other {
+  background: var(--surface);
+  color: var(--muted);
+  border-color: var(--line);
+}
+
+.result-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.result-nome {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.result-detail {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.result-premio {
+  font-family: var(--numeral);
+  font-weight: 400;
+  font-size: 0.9rem;
+  text-align: right;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.result-premio.positive { color: var(--win); }
+.result-premio.zero { color: var(--muted); }
+
+.odd-tag {
+  display: inline-flex;
+  align-items: center;
+  background: var(--ink);
+  color: var(--surface-2);
+  padding: 1px 6px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  height: 16px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================
+   ODDS CHIPS
+   ============================================ */
+.odds-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.odds-chip {
+  background: var(--surface);
+  color: var(--ink);
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border: 2px solid var(--ink);
+  transition: all var(--transition);
+}
+
+.odds-chip:hover {
+  background: var(--ink);
+  color: var(--surface-2);
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.empty {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--muted);
+}
+
+.empty-icon { font-size: 2.2rem; margin-bottom: 10px; opacity: 0.5; }
+.empty h3 { color: var(--ink); margin-bottom: 4px; font-weight: 700; font-size: 0.95rem; }
+.empty p { font-size: 0.82rem; }
+
+/* ============================================
+   LOADING
+   ============================================ */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin: 12px auto 0;
+  border: 3px solid var(--line);
+  border-top-color: var(--ink);
+  animation: spin 0.8s linear infinite;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide-up {
+  animation: slideUp 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+/* ============================================
+   TOAST
+   ============================================ */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  color: var(--surface-2);
+  padding: 10px 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  z-index: 200;
+  animation: slideUp 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
+  max-width: 90%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.toast.error {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.toast.success {
+  background: var(--win);
+  border-color: var(--win);
+  color: #fff;
+}
+
+/* ============================================
+   PLAYER CHIP
+   ============================================ */
+.player-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.player-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 2px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--body);
+}
+
+.player-chip:hover {
+  background: var(--ink);
+  color: var(--surface-2);
+}
+
+.player-chip.active {
+  background: var(--ink);
+  color: var(--surface-2);
+}
+
+/* ============================================
+   INFO CARD
+   ============================================ */
+.info-card {
+  border: 2px solid var(--ink);
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-card.warning {
+  background: #FFF8E1;
+  border-color: var(--accent-2);
+}
+
+.info-card.success {
+  background: #E8F5E9;
+  border-color: var(--win);
+}
+
+/* ============================================
+   CLICKABLE CARD
+   ============================================ */
+.card.clickable {
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.card.clickable:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--line-strong);
+}
+
+/* ============================================
+   BET ACTIVE
+   ============================================ */
+.bet-active {
+  border-left: 5px solid var(--win) !important;
+}
+
+/* ============================================
+   STATUS MESSAGE
+   ============================================ */
+.status-msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border: 2px solid var(--ink);
+}
+
+.status-msg.info {
+  background: #E3F2FD;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.status-msg.success {
+  background: #E8F5E9;
+  border-color: var(--win);
+  color: var(--win);
+}
+
+.status-msg.warning {
+  background: #FFF8E1;
+  border-color: var(--accent-2);
+  color: var(--ink);
+}
+
+/* ============================================
+   TABLE (DevPanel)
+   ============================================ */
+.dev-table {
+  width: 100%;
+  font-size: 0.75rem;
+  border-collapse: collapse;
+  border: 2px solid var(--ink);
+}
+
+.dev-table th {
+  background: var(--ink);
+  color: var(--surface-2);
+  font-weight: 800;
+  padding: 6px 8px;
+  text-align: left;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 2px solid var(--ink);
+}
+
+.dev-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 0.72rem;
+}
+
+.dev-table tr:last-child td {
+  border-bottom: none;
+}
+
+.dev-table tr.highlight {
+  background: #FFF8E1;
+}
+
+.dev-table tbody tr:nth-child(even) {
+  background: var(--surface);
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+.progress-bar {
+  height: 8px;
+  background: var(--line);
+  border: 2px solid var(--ink);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  transition: width 0.1s linear;
+  background: var(--accent);
+}
+
+.progress-bar-fill.complete {
+  background: var(--win);
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border: 1px solid var(--ink);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* ============================================
+   SELECTION
+   ============================================ */
+::selection {
+  background: var(--ink);
+  color: var(--surface-2);
+}

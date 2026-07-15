@@ -1,7 +1,19 @@
+"""
+Local development entry point for Betchat.
+
+Imports from the `api/` directory (single source of truth with Vercel).
+"""
+import sys
+from pathlib import Path
+
+# Add api/ to Python path so imports work for local dev
+api_dir = str(Path(__file__).resolve().parent.parent / "api")
+if api_dir not in sys.path:
+    sys.path.insert(0, api_dir)
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from pathlib import Path
 from contextlib import asynccontextmanager
 
 from database import init_db
@@ -40,7 +52,7 @@ def health():
     return {"status": "ok", "version": "1.0.0"}
 
 
-# Catch-all: serve frontend SPA (only for non-API routes)
+# Catch-all: serve frontend SPA (only for non-API routes, local dev only)
 @app.get("/{full_path:path}")
 async def serve_frontend(full_path: str):
     file_path = frontend_dist / (full_path or "index.html")
@@ -49,5 +61,4 @@ async def serve_frontend(full_path: str):
     index = frontend_dist / "index.html"
     if index.exists():
         return FileResponse(str(index))
-    # Fallback: return index.html for SPA routing
     return FileResponse(str(index))

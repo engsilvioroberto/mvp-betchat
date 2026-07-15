@@ -1,16 +1,16 @@
 """
 Vercel serverless entry point for Betchat API.
 
-Imports the FastAPI app from the backend module and initializes the database.
+Adds the `api/` directory to Python path so all local imports resolve.
 """
 import sys
-import os
 from pathlib import Path
 
-# Ensure backend/ is on the Python path so imports work
-backend_dir = str(Path(__file__).resolve().parent.parent / "backend")
-if backend_dir not in sys.path:
-    sys.path.insert(0, backend_dir)
+# Add this directory (api/) to Python path so
+# `from database import ...` and `from routers.xxx import ...` work
+_api_dir = Path(__file__).resolve().parent
+if str(_api_dir) not in sys.path:
+    sys.path.insert(0, str(_api_dir))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware

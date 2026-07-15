@@ -1,7 +1,11 @@
-"""Minimal Vercel Python test - no frameworks"""
-def handler(request):
-    return {
-        "statusCode": 200,
-        "headers": {"content-type": "application/json"},
-        "body": '{"status":"ok","version":"test-python"}',
-    }
+"""
+Vercel serverless entry point for Betchat API.
+"""
+from fastapi import FastAPI
+
+app = FastAPI(title="Betchat", version="1.0.0")
+
+
+@app.get("/api/health")
+def health():
+    return {"status": "ok", "version": "1.0.0"}

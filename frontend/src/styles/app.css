@@ -148,7 +148,7 @@ body::before {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 
 /* ============================================
@@ -160,6 +160,7 @@ body::before {
   padding: 14px;
   box-shadow: var(--hard-shadow);
   position: relative;
+  margin-bottom: 0;
 }
 
 .card h3 {

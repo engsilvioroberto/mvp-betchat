@@ -1,5 +1,6 @@
 """
 Vercel serverless entry point for Betchat API.
+Uses Mangum to adapt FastAPI (ASGI) to Vercel's serverless format.
 """
 import sys
 from pathlib import Path
@@ -10,8 +11,9 @@ if str(_api_dir) not in sys.path:
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 
-from database import init_db, engine
+from database import init_db
 from routers.groups import router as groups_router
 from routers.players import router as players_router
 from routers.bets import router as bets_router
@@ -38,3 +40,7 @@ app.include_router(simulate_router)
 @app.get("/api/health")
 def health():
     return {"status": "ok", "version": "1.0.0"}
+
+
+# Vercel handler — Mangum adapts FastAPI ASGI to Vercel's serverless HTTP
+handler = Mangum(app)

@@ -1,18 +1,9 @@
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-.venv/
-venv/
-*.db
-
-# Node
 node_modules/
 dist/
+.venv/
+__pycache__/
+*.pyc
+*.db
 .env
 .env.local
-
-# OS
-.DS_Store
-Thumbs.db
-api/routers/__pycache__
+api/static/

@@ -13,13 +13,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
 
-from database import init_db
+from database import init_db, engine
 from routers.groups import router as groups_router
 from routers.players import router as players_router
 from routers.bets import router as bets_router
 from routers.simulate import router as simulate_router
-
-init_db()
 
 app = FastAPI(title="Betchat", version="1.0.0")
 
@@ -39,7 +37,12 @@ app.include_router(simulate_router)
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "version": "1.0.0"}
+    # Lazy init: try to connect on first health check
+    try:
+        init_db()
+        return {"status": "ok", "version": "1.0.0", "db": "connected"}
+    except Exception as e:
+        return {"status": "error", "version": "1.0.0", "db": str(e)}
 
 
 # Vercel handler — Mangum adapts FastAPI ASGI to Vercel's serverless HTTP

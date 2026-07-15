@@ -1,13 +1,13 @@
 """
 Vercel serverless entry point for Betchat API.
 Uses Mangum to adapt FastAPI (ASGI) to Vercel's serverless format.
-The frontend static files are served from the `static/` directory.
+Frontend is served via explicit routes for static files + SPA fallback.
 """
 import sys
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, JSONResponse
 from mangum import Mangum
 
 _api_dir = Path(__file__).resolve().parent
@@ -45,11 +45,46 @@ def health():
         return {"status": "error", "version": "1.0.0", "db": str(e)}
 
 
-# Serve frontend static files from the static/ directory
-static_dir = _api_dir / "static"
-if static_dir.exists():
-    # Mount static files at root — SPA: any non-API path serves index.html
-    app.mount("/", StaticFiles(directory=str(static_dir), html=True), name="static")
+# --- Frontend static file serving ---
+STATIC_DIR = _api_dir / "static"
+
+if STATIC_DIR.exists():
+    import mimetypes
+    mimetypes.init()
+
+    @app.get("/assets/{filepath:path}")
+    async def serve_asset(filepath: str):
+        file = STATIC_DIR / "assets" / filepath
+        if file.is_file():
+            return FileResponse(str(file))
+        return JSONResponse(status_code=404, content={"error": "Not found"})
+
+    @app.get("/favicon.svg")
+    async def serve_favicon():
+        file = STATIC_DIR / "favicon.svg"
+        if file.is_file():
+            return FileResponse(str(file))
+        return JSONResponse(status_code=404, content={"error": "Not found"})
+
+    @app.get("/icons.svg")
+    async def serve_icons():
+        file = STATIC_DIR / "icons.svg"
+        if file.is_file():
+            return FileResponse(str(file))
+        return JSONResponse(status_code=404, content={"error": "Not found"})
+
+    # SPA catch-all — serve index.html for any non-API path
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        index = STATIC_DIR / "index.html"
+        if index.exists():
+            return FileResponse(str(index))
+        return JSONResponse(status_code=404, content={"error": "Frontend not built"})
+else:
+    @app.get("/{full_path:path}")
+    async def not_built(full_path: str):
+        return JSONResponse(status_code=404, content={"error": "Frontend not built. Run build command first."})
+
 
 # Vercel handler
 handler = Mangum(app)

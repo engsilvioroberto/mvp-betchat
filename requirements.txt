@@ -1,1 +1,5 @@
 fastapi
+sqlalchemy
+pg8000
+pydantic
+python-dotenv

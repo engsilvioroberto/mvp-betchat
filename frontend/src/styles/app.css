@@ -21,7 +21,7 @@
   --numeral: 'Archivo Black', sans-serif;
   --hard-shadow: 3px 3px 0 var(--line);
   --hard-shadow-ink: 3px 3px 0 #1B1A17;
-  --card-border: 2px solid #FFFFFF;
+  --card-border: 2px solid var(--ink);
   --radius: 2px;
   --transition: 120ms cubic-bezier(0.2, 0.7, 0.3, 1);
 }
